@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <title>Polymorphism and conditionals</title>
+        <link rel="stylesheet" href="css/css.css" type="text/css" media="all">
+        <link rel="stylesheet" href="css/prism.css" type="text/css" media="all">
+        <link rel="stylesheet" href="css/latex.css" type="text/css" media="all">
+    </head>
+    <body>
+
+      
+<h1 id="polymorphism-and-conditionals">Polymorphism and conditionals</h1>
+<blockquote>
+<p>Most <code>if</code>s can be replaced with polymorphism.</p>
+</blockquote>
+<h2 id="why-would-you-go-about-replacing-all-ifs%3F">Why would you go about replacing all <code>if</code>s?</h2>
+<ul>
+<li>functions without <code>if</code>s are easier to read and reason about</li>
+<li>functions without <code>if</code>s are easier to test, as there is only one execution per code</li>
+<li>polymorphic system is easier to maintain - easier to extend</li>
+</ul>
+<h2 id="when-to-use-polymorphism%3F">When to use polymorphism?</h2>
+<ul>
+<li>if an object should behave differently based on it's state</li>
+<li>if the same condition is checked in multiple places</li>
+</ul>
+<h2 id="when-to-use-conditionals%3F">When to use conditionals?</h2>
+<ul>
+<li>in comparisons of primitive objects: <code>&gt;</code>,<code>&lt;</code>,<code>==</code>,<code>!=</code></li>
+<li>when the comparison is part of business logic</li>
+</ul>
+<h2 id="how-to-be-if-free%3F">How to be <code>if</code> free?</h2>
+<ul>
+<li>do not return <code>null</code> or &quot;nullable&quot; types (php feature)</li>
+<li>do not return error codes instead throw RunTime exception</li>
+</ul>
+<blockquote>
+<p>Instead of returning <code>null</code> you can return <a href="https://en.wikipedia.org/wiki/Null_object_pattern">&quot;null object&quot;</a></p>
+</blockquote>
+<hr>
+<h1 id="example-%231---state-based-behaviour.">Example #1 - state based behaviour.</h1>
+<blockquote>
+<p>When you have a conditional that chooses a different behaviour based on a <em>type</em> of an object,
+then move each leg of conditional into an overriding method of a subclass and
+make the original method abstract.</p>
+</blockquote>
+<p>Your task is to model this expression <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn><mo>+</mo><mn>2</mn><mo>∗</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">1+2*3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.64444em;"></span><span class="strut bottom" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="base"><span class="mord">1</span><span class="mord rule" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mord rule" style="margin-right:0.2222222222222222em;"></span><span class="mord">2</span><span class="mord rule" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mord rule" style="margin-right:0.2222222222222222em;"></span><span class="mord">3</span></span></span></span> as object:</p>
+<ul>
+<li>that can be evaluated</li>
+<li>that can represent itself as string</li>
+</ul>
+<p>Such tree structure would be used to represent particular expression.</p>
+<img src="img/26549dbb2238c8c1592fb6544ce46d9d.png" alt="uml diagram">
+<p>Then &quot;evaluate&quot; and &quot;toString&quot; methods will be implemented.</p>
+<pre><code class="language-php">&lt;?php
+class Node {
+    protected string $operator;
+    protected float $value;
+    protected ?Node $left;
+    protected ?Node $right;
+
+    public function evaluate(): float {
+        switch ($this-&gt;operator) {
+        case '#': return $this-&gt;value;
+        case '+': return $this-&gt;left-&gt;evaluate() + $this-&gt;right-&gt;evaluate();
+        case '*': return $this-&gt;left-&gt;evaluate() * $this-&gt;right-&gt;evaluate();
+        }
+    }
+}
+</code></pre>
+<img src="img/9717e7b1354d0f1c04af19b9b45a5ad7.png" alt="uml diagram">
+<p>Main problems with such careless implementation:</p>
+<ul>
+<li><code>toString</code> method <em>(once implemented)</em> would <strong>have to mimic</strong> this <code>case</code> statement <em>(code duplication)</em></li>
+<li>when another operation is added - all of these <code>case</code> statements would require that update</li>
+</ul>
+<p>Analyzing attribute usage:</p>
+<ul>
+<li>if that is <em>operation node</em> - attributes <code>left</code>, <code>right</code> and <code>operator</code> are only used</li>
+<li>if that is <em>value node</em> - only <code>value</code> attribute is used</li>
+</ul>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>#</th>
+<th>+</th>
+<th>*</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>operator</td>
+<td></td>
+<td>y</td>
+<td>y</td>
+</tr>
+<tr>
+<td>value</td>
+<td>y</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>left</td>
+<td></td>
+<td>y</td>
+<td>y</td>
+</tr>
+<tr>
+<td>right</td>
+<td></td>
+<td>y</td>
+<td>y</td>
+</tr>
+</tbody>
+</table>
+<p>This table gives us a feeling that some kind of polymorphic behaviour <strong>is</strong> happening,
+and it is happening through fields and <code>if</code> statements instead of polymorphism.</p>
+</blockquote>
+<p>Break them up:</p>
+<img src="img/1f81a531a213a4f24d0bd2db5eb4b127.png" alt="uml diagram">
+<blockquote>
+<p>Now the <em>behaviour</em> of object is determined based on it's type - as it should be.</p>
+</blockquote>
+<p>See how simple is <code>evaluate</code> method implementation on <em>value node</em> has become.</p>
+<pre><code class="language-php">&lt;?php
+class ValueNode implements Node {
+    // ..
+    public function evaluate(): float {
+        return $this-&gt;value;
+    }
+}
+</code></pre>
+<p><code>evaluate</code> method on <em>operation node</em> is now a bit simpler too.</p>
+<pre><code class="language-php">&lt;?php
+class OpNode implements Node {
+    // ..
+    public function evaluate(): float {
+        switch ($this-&gt;operator) {
+        case '+': return $this-&gt;left-&gt;evaluate() + $this-&gt;right-&gt;evaluate();
+        case '*': return $this-&gt;left-&gt;evaluate() * $this-&gt;right-&gt;evaluate();
+        }
+    }
+}
+</code></pre>
+<p>What else just changed?</p>
+<ul>
+<li>we got rid of <code>null</code> values in <code>left</code> and <code>right</code> properties in <em>operation nodes</em></li>
+<li>we got rid of that unused <code>value</code> property in <em>operation node</em></li>
+</ul>
+<p>But still there is that <code>case</code> statement.</p>
+<blockquote>
+<p>Think about how you would extend this - each time you add a new operator, <code>toString</code>
+method will have to mimic <code>evaluate</code> method still.</p>
+</blockquote>
+<p>For this reason we break up <em>operation node</em> more.</p>
+<pre><code class="language-php">&lt;?php
+abstract class OpNode implements Node {
+    protected Node $left;
+    protected Node $right;
+}
+class AdditionNode extends OpNode {
+    public function evaluate(): float {
+        return $this-&gt;left-&gt;evaluate() + $this-&gt;right-&gt;evaluate();
+    }
+}
+class MultiplicationNode extends OpNode {
+    public function evaluate(): float {
+        return $this-&gt;left-&gt;evaluate() * $this-&gt;right-&gt;evaluate();
+    }
+}
+</code></pre>
+<img src="img/5002d0dda69b1b2aaa8ce8f376fa169c.png" alt="uml diagram">
+<blockquote>
+<p>Now there can be no null pointer exceptions.
+Code is now more organized.
+There is less clutter.
+There is less cognitive load.
+Maintainability and readability has improved.
+Easy to introduce <code>toString</code> method into this system.
+Easy to introduce new <code>%</code> operator (open/close principle).
+It is now easier to write tests for this system.</p>
+</blockquote>
+<h1 id="example-%232---repeated-condition">Example #2 - repeated condition</h1>
+<blockquote>
+<p>When based on a state outside this object (i.e. some global constant),
+object should behave a bit differently. How to re-factor?</p>
+</blockquote>
+<p>Here an <code>Update</code> object represents the update of some sort.
+And there is global flag <code>FLAG_i18n_ENABLED</code> that determines if
+internationalization is enabled or not.</p>
+<pre><code class="language-php">&lt;?php
+class Update {
+    public function execute() {
+        if (FLAG_i18n_ENABLED) {
+            // Do A
+        } else {
+            // Do B
+        }
+    }
+    public function render() {
+        if (FLAG_i18n_ENABLED) {
+            // return A
+        } else {
+            // return B
+        }
+    }
+}
+</code></pre>
+<img src="img/bb884cff582447bb905e09ec78575dce.png" alt="uml diagram">
+<p>Notice the repeated conditional, seems like a maintenance burden.
+Bugs will appear if someone is not careful enough. Rather choose this implementation:</p>
+<pre><code class="language-php">&lt;?php
+interface Update {
+    public function execute();
+    public function render();
+}
+
+class I18NUpdate implements Update {
+    public function execute() {
+        // Do A
+    }
+
+    public function render() {
+        // return A
+    }
+}
+
+class NonI18NUpdate implements Update {
+    public function execute() {
+        // Do B
+    }
+
+    public function render() {
+        // return B
+    }
+}
+</code></pre>
+<img src="img/afd41421d1a8b28e9f0cc8d6787fbba7.png" alt="uml diagram">
+<blockquote>
+<p>Keep your <code>if</code>s closer to the <em>edge of application</em>.</p>
+</blockquote>
+<p>Actually the <code>if</code> statement here <strong>did not</strong> disappear!
+It got moved!</p>
+<p>Because once you need to <em>consume</em> an <code>Update</code>
+then you still need to decide which version to use.
+Someone else is responsible for instantiating the <strong>correct</strong>
+object, and the consumer does not care if it got passed as an
+<em>i18n</em> or <em>noni18n</em> version.</p>
+<pre><code class="language-php">&lt;?php
+class Factory {
+    public static function update(): Update {
+        return FLAG_i18n_ENABLED
+            ? new I18NUpdate()
+            : new NonI18NUpdate();
+    }
+}
+
+class Consumer {
+    public function process(Update $update) {
+        $update-&gt;execute();
+    }
+}
+</code></pre>
+<p>This leads us back to the good old <em>dependency injection</em>.</p>
+<blockquote>
+<h3 id="keep-two-piles-of-objects%3A">Keep two piles of objects:</h3>
+<ul>
+<li>pile of objects that <em>does business logic</em> and domain abstractions</li>
+<li>pile of objects that <em>is construction responsible</em> for building object graphs</li>
+</ul>
+</blockquote>
+<p>So the factory then decides to instantiate international version.</p>
+<p>Now also we will not have to make the same decision over and over again
+in cases when this code runs in some tight loop.</p>
+<h1 id="example-%233---business-logic-has-to-behave-differently">Example #3 - business logic has to behave differently</h1>
+<blockquote>
+<p>By just wiring up objects differently you can change the behaviour of application.</p>
+</blockquote>
+<pre><code class="language-php">&lt;?php
+interface Connection {
+    public function write(string $txt);
+}
+
+class App {
+    protected Connection $connection;
+
+    public function notify(string $message) {
+        $this-&gt;connection-&gt;write($message);
+    }
+}
+
+$app = new App(new UnixConnection);
+</code></pre>
+<hr>
+<blockquote>
+<p>When you see a <code>case</code> statement - it usually is a pretty good indicator
+that polymorphism begs to be there.
+Try to write a project without <code>if</code>s. It should be good experience.
+Meanwhile, try staying pragmatic.</p>
+</blockquote>
+<hr>
+
+
+     	<script src="js/prism.js"></script>
+    </body>
+    </html>
+  

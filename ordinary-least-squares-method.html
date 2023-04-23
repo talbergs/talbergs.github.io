@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <title>Ordinary least squares method</title>
+        <link rel="stylesheet" href="css/css.css" type="text/css" media="all">
+        <link rel="stylesheet" href="css/prism.css" type="text/css" media="all">
+        <link rel="stylesheet" href="css/latex.css" type="text/css" media="all">
+    </head>
+    <body>
+
+      
+<h1 id="ordinary-least-squares-method">Ordinary least squares method</h1>
+<blockquote>
+<p>A statistical way of measuring relationship between variables.</p>
+</blockquote>
+<ul>
+<li>Model is a line is expressed like so <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>y</mi><mo>=</mo><mi>m</mi><mi>x</mi><mo>+</mo><mi>b</mi></mrow><annotation encoding="application/x-tex">y = mx + b</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="base"><span class="mord mathit" style="margin-right:0.03588em;">y</span><span class="mord rule" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mord rule" style="margin-right:0.2777777777777778em;"></span><span class="mord mathit">m</span><span class="mord mathit">x</span><span class="mord rule" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mord rule" style="margin-right:0.2222222222222222em;"></span><span class="mord mathit">b</span></span></span></span>
+<ul>
+<li>where <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>m</mi></mrow><annotation encoding="application/x-tex">m</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.43056em;vertical-align:0em;"></span><span class="base"><span class="mord mathit">m</span></span></span></span> is the slope or gradient</li>
+<li>and <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>b</mi></mrow><annotation encoding="application/x-tex">b</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.69444em;vertical-align:0em;"></span><span class="base"><span class="mord mathit">b</span></span></span></span> is the value where line intersects Y axis (a.k.a &quot;the Y intercept&quot;)</li>
+<li>where <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>y</mi></mrow><annotation encoding="application/x-tex">y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="base"><span class="mord mathit" style="margin-right:0.03588em;">y</span></span></span></span> and <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.43056em;vertical-align:0em;"></span><span class="base"><span class="mord mathit">x</span></span></span></span> are axis (features)</li>
+</ul>
+</li>
+<li>To find this line do the following:
+<ul>
+<li>Calculate the slope (<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>m</mi></mrow><annotation encoding="application/x-tex">m</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.43056em;vertical-align:0em;"></span><span class="base"><span class="mord mathit">m</span></span></span></span>)
+<ul>
+<li><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mstyle scriptlevel="0" displaystyle="true"><mrow><mi>m</mi></mrow><mo>=</mo><mfrac><mrow><mo>∑</mo><mo>(</mo><mo>(</mo><mrow><mi>x</mi></mrow><mo>−</mo><mover accent="true"><mrow><mi>x</mi></mrow><mo stretchy="true">‾</mo></mover><mo>)</mo><mo>∗</mo><mo>(</mo><mrow><mi>y</mi></mrow><mo>−</mo><mover accent="true"><mrow><mi>y</mi></mrow><mo stretchy="true">‾</mo></mover><mo>)</mo><mo>)</mo></mrow><mrow><mo>∑</mo><mo>(</mo><mo>(</mo><mrow><mi>x</mi></mrow><mo>−</mo><mover accent="true"><mrow><mi>x</mi></mrow><mo stretchy="true">‾</mo></mover><msup><mo>)</mo><mn>2</mn></msup><mo>)</mo></mrow></mfrac></mstyle></mrow><annotation encoding="application/x-tex">   \displaystyle        {m} = \frac           {\sum (({x}-\overline{x}) * ({y}-\overline{y}))}           {\sum (({x}-\overline{x})^2)} </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:1.427em;"></span><span class="strut bottom" style="height:2.36301em;vertical-align:-0.93601em;"></span><span class="base"><span class="mord"><span class="mord mathit">m</span></span><span class="mord rule" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mord rule" style="margin-right:0.2777777777777778em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.427em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mop op-symbol small-op" style="position:relative;top:-0.0000050000000000050004em;">∑</span><span class="mopen">(</span><span class="mopen">(</span><span class="mord"><span class="mord mathit">x</span></span><span class="mord rule" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mord rule" style="margin-right:0.2222222222222222em;"></span><span class="mord overline"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.51056em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathit">x</span></span></span><span style="top:-3.47056em;"><span class="pstrut" style="height:3em;"></span><span class="stretchy" style="height:0.2em;"><svg width='400em' height='0.2em' viewBox='0 0 400000 200' preserveAspectRatio='xMinYMin slice'><path d='M0 80H400000 v40H0z M0 80H400000 v40H0z'/></svg></span></span></span></span></span></span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.740108em;"><span style="top:-2.9890000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span><span style="top:-3.15em;"><span class="pstrut" style="height:3em;"></span><span class="stretchy" style="height:0.2em;"><svg width='400em' height='0.2em' viewBox='0 0 400000 200' preserveAspectRatio='xMinYMin slice'><path d='M0 80H400000 v40H0z M0 80H400000 v40H0z'/></svg></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mop op-symbol small-op" style="position:relative;top:-0.0000050000000000050004em;">∑</span><span class="mopen">(</span><span class="mopen">(</span><span class="mord"><span class="mord mathit">x</span></span><span class="mord rule" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mord rule" style="margin-right:0.2222222222222222em;"></span><span class="mord overline"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.51056em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathit">x</span></span></span><span style="top:-3.47056em;"><span class="pstrut" style="height:3em;"></span><span class="stretchy" style="height:0.2em;"><svg width='400em' height='0.2em' viewBox='0 0 400000 200' preserveAspectRatio='xMinYMin slice'><path d='M0 80H400000 v40H0z M0 80H400000 v40H0z'/></svg></span></span></span></span></span></span><span class="mclose">)</span><span class="mord rule" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mord rule" style="margin-right:0.2222222222222222em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathit" style="margin-right:0.03588em;">y</span></span><span class="mord rule" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mord rule" style="margin-right:0.2222222222222222em;"></span><span class="mord overline"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.51056em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathit" style="margin-right:0.03588em;">y</span></span></span><span style="top:-3.47056em;"><span class="pstrut" style="height:3em;"></span><span class="stretchy" style="height:0.2em;"><svg width='400em' height='0.2em' viewBox='0 0 400000 200' preserveAspectRatio='xMinYMin slice'><path d='M0 80H400000 v40H0z M0 80H400000 v40H0z'/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"></span></span></span></span><span class="mclose">)</span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.93601em;"></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></li>
+<li>where <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mrow><mi>x</mi></mrow><mo stretchy="true">‾</mo></mover></mrow><annotation encoding="application/x-tex">\overline{x}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.51056em;"></span><span class="strut bottom" style="height:0.51056em;vertical-align:0em;"></span><span class="base"><span class="mord overline"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.51056em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathit">x</span></span></span><span style="top:-3.47056em;"><span class="pstrut" style="height:3em;"></span><span class="stretchy" style="height:0.2em;"><svg width='400em' height='0.2em' viewBox='0 0 400000 200' preserveAspectRatio='xMinYMin slice'><path d='M0 80H400000 v40H0z M0 80H400000 v40H0z'/></svg></span></span></span></span></span></span></span></span></span> and <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mrow><mi>y</mi></mrow><mo stretchy="true">‾</mo></mover></mrow><annotation encoding="application/x-tex">\overline{y}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.51056em;"></span><span class="strut bottom" style="height:0.7050000000000001em;vertical-align:-0.19444em;"></span><span class="base"><span class="mord overline"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.51056em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathit" style="margin-right:0.03588em;">y</span></span></span><span style="top:-3.47056em;"><span class="pstrut" style="height:3em;"></span><span class="stretchy" style="height:0.2em;"><svg width='400em' height='0.2em' viewBox='0 0 400000 200' preserveAspectRatio='xMinYMin slice'><path d='M0 80H400000 v40H0z M0 80H400000 v40H0z'/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"></span></span></span></span></span></span></span> are arithmetic averages of <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.43056em;vertical-align:0em;"></span><span class="base"><span class="mord mathit">x</span></span></span></span> and <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>y</mi></mrow><annotation encoding="application/x-tex">y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="base"><span class="mord mathit" style="margin-right:0.03588em;">y</span></span></span></span></li>
+</ul>
+</li>
+<li>Calculate Y intercept (<code>b</code>)
+<ul>
+<li><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mrow><mi>b</mi></mrow><mo>=</mo><mover accent="true"><mrow><mi>y</mi></mrow><mo stretchy="true">‾</mo></mover><mo>−</mo><mrow><mi>m</mi></mrow><mo>∗</mo><mover accent="true"><mrow><mi>x</mi></mrow><mo stretchy="true">‾</mo></mover></mrow><annotation encoding="application/x-tex">{b} = \overline{y} - {m} * \overline{x}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="base"><span class="mord"><span class="mord mathit">b</span></span><span class="mord rule" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mord rule" style="margin-right:0.2777777777777778em;"></span><span class="mord overline"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.51056em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathit" style="margin-right:0.03588em;">y</span></span></span><span style="top:-3.47056em;"><span class="pstrut" style="height:3em;"></span><span class="stretchy" style="height:0.2em;"><svg width='400em' height='0.2em' viewBox='0 0 400000 200' preserveAspectRatio='xMinYMin slice'><path d='M0 80H400000 v40H0z M0 80H400000 v40H0z'/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"></span></span></span></span><span class="mord rule" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mord rule" style="margin-right:0.2222222222222222em;"></span><span class="mord"><span class="mord mathit">m</span></span><span class="mord rule" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mord rule" style="margin-right:0.2222222222222222em;"></span><span class="mord overline"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.51056em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathit">x</span></span></span><span style="top:-3.47056em;"><span class="pstrut" style="height:3em;"></span><span class="stretchy" style="height:0.2em;"><svg width='400em' height='0.2em' viewBox='0 0 400000 200' preserveAspectRatio='xMinYMin slice'><path d='M0 80H400000 v40H0z M0 80H400000 v40H0z'/></svg></span></span></span></span></span></span></span></span></span></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>Squaring is done just to get rid of the differences
+where some points are below the line and some above - thus negative and positive.</p>
+</blockquote>
+<h2 id="example%3A">Example:</h2>
+<p>To follow along, download <code>avocado.csv</code> available here <a href="https://www.kaggle.com/neuromusic/avocado-prices">https://www.kaggle.com/neuromusic/avocado-prices</a> (you might be required to sign up there).</p>
+<p>We would take only 3rd and 4th column from this dataset signifying avocado average price and number of avocados sold that week.</p>
+<blockquote>
+<p>Sed, deletes first line and grep filters &quot;organic&quot; type avocado data from 2018, Cut takes columns 3 and 4.</p>
+</blockquote>
+<pre><code class="language-text">&gt; sed '1d' ./avocado.csv | grep 'organic,2018' | cut -d, -f3,4 | php ./lr.php 10000000
+If you sold '10000000' avocados, then average price would be '1.3661579991434' per avocado.
+</code></pre>
+<blockquote>
+<p>Here we filter by &quot;conventional&quot; avocado type, it looks to be cheaper than &quot;organic&quot; one.</p>
+</blockquote>
+<pre><code class="language-text">&gt; sed '1d' ./avocado.csv | grep 'conventional,2018' | cut -d, -f3,4 | php ./lr.php 10000000
+If you sold '10000000' avocados, then average price would be '1.0932809555559' per avocado.
+</code></pre>
+<blockquote>
+<p>If we double the total sold avocado estimate,
+<em>predicted</em> average price seems to fall dramatically.</p>
+</blockquote>
+<pre><code class="language-text">&gt; sed '1d' ./avocado.csv | grep 'organic,2018' | cut -d, -f3,4 | php ./lr.php 20000000
+If you sold '20000000' avocados, then average price would be '1.1636231780942' per avocado.
+</code></pre>
+<blockquote>
+<p>That is not the case for &quot;conventional&quot; type of avocado, the price falls, but not very much.</p>
+</blockquote>
+<pre><code class="language-text">&gt; sed '1d' ./avocado.csv | grep 'conventional,2018' | cut -d, -f3,4 | php ./lr.php 20000000
+If you sold '20000000' avocados, then average price would be '1.0497037328746' per avocado.
+</code></pre>
+<p>Where the <code>./lr.php</code> (linear regression) file looks like so:</p>
+<pre><code class="language-php">&lt;?php declare(strict_types=1);
+
+$data = [];
+
+while ($line = fgets(STDIN)) {
+    $data[] = explode(',', trim($line));
+}
+
+$price_mean = array_sum(array_column($data, 0)) / count($data);
+$sold_mean = array_sum(array_column($data, 1)) / count($data);
+
+$numerator = 0;
+$denominator = 0;
+
+foreach ($data as [$price, $sold]) {
+    $numerator += ($sold - $sold_mean) * ($price - $price_mean);
+    $denominator += pow($sold - $sold_mean, 2);
+}
+
+$m = $numerator / $denominator;
+$b = $price_mean - $m * $sold_mean;
+
+$prediction = $m * $argv[1] + $b;
+
+echo &quot;If you sold '{$argv[1]}' avocados, then average price would be '{$prediction}' per avocado.&quot;;
+</code></pre>
+
+
+     	<script src="js/prism.js"></script>
+    </body>
+    </html>
+  

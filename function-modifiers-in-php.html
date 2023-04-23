@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <title>Function modifiers in php</title>
+        <link rel="stylesheet" href="css/css.css" type="text/css" media="all">
+        <link rel="stylesheet" href="css/prism.css" type="text/css" media="all">
+        <link rel="stylesheet" href="css/latex.css" type="text/css" media="all">
+    </head>
+    <body>
+
+      
+<h1 id="function-modifiers-in-php">Function modifiers in php</h1>
+<p>These function calls happens to be valid php syntax. Each of these is a call to the same function <code>decor</code>.</p>
+<pre><code class="language-php">&lt;?php
++decor(); // #=&gt; Called with &quot;+&quot;.
+-decor(); // #=&gt; Called with &quot;-&quot;.
+!decor(); // #=&gt; Called with &quot;!&quot;.
+@decor(); // #=&gt; Called with &quot;@&quot;.
+~decor(); // #=&gt; Called with &quot;~&quot;.
+decor();  // #=&gt; Called as regular.
+</code></pre>
+<p>A project <a href="https://kint-php.github.io/kint/advanced/#modifiers">knit</a>
+decided to take advantage of this.</p>
+<p>There is no trick. Function itself just
+checks on how it was called and then performs based on that.</p>
+<h2 id="overview">Overview</h2>
+<p>An oversimplified example below illustrates mechanism.</p>
+<pre><code class="language-php">&lt;?php
+function decor() {
+    [['file' =&gt; $file, 'line' =&gt; $line]] = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
+
+    $file = new SplFileObject($file);
+    $file-&gt;seek($line - 1);
+
+    $line = $file-&gt;current();
+
+    switch ($line[strpos($line, __FUNCTION__) - 1]) {
+    case '+': echo 'Called with &quot;+&quot;.'; break;
+    case '-': echo 'Called with &quot;-&quot;.'; break;
+    case '!': echo 'Called with &quot;!&quot;.'; break;
+    case '@': echo 'Called with &quot;@&quot;.'; break;
+    case '~': echo 'Called with &quot;~&quot;.'; break;
+    default: echo 'Called as regular.'; break;
+    }
+
+    echo PHP_EOL;
+
+    return 0;
+}
+</code></pre>
+<blockquote>
+<p>When <code>~</code> operator is used, function must return integer.</p>
+</blockquote>
+
+
+     	<script src="js/prism.js"></script>
+    </body>
+    </html>
+  

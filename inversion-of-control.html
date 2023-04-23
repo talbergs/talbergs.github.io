@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <title>Inversion of control and dependency injection</title>
+        <link rel="stylesheet" href="css/css.css" type="text/css" media="all">
+        <link rel="stylesheet" href="css/prism.css" type="text/css" media="all">
+        <link rel="stylesheet" href="css/latex.css" type="text/css" media="all">
+    </head>
+    <body>
+
+      
+<h1 id="inversion-of-control-and-dependency-injection">Inversion of control and dependency injection</h1>
+<blockquote>
+<p>Inversion of control (IoC) principle - Objects <strong>do not create other objects</strong>
+on which they rely. Instead, they they get objects that they need
+from an outside source.</p>
+</blockquote>
+<h2 id="what-is-an-dependency%3F">What is an dependency?</h2>
+<p>When class <code>A</code> needs some copy or instance of class <code>B</code> inside of it
+for it's operation to be successful,
+then we say that class <code>A</code> depends on class <code>B</code>.</p>
+<h2 id="typical-procedural-implementation">Typical procedural implementation</h2>
+<p>Here <code>User</code> class depends on <code>MYSQLDatabase</code>.</p>
+<pre><code class="language-php">&lt;?php
+class User {
+    protected MYSQLDatabase $database;
+
+    public function __construct() {
+        $this-&gt;database = new MYSQLDatabase();
+    }
+
+    public function save() {
+        $this-&gt;database-&gt;sql('UPDATE WHERE etc..');
+    }
+}
+
+$user = new User();
+$user-&gt;save();
+</code></pre>
+<p>Couple of problems with this:</p>
+<ul>
+<li>impossible to write unit tests for <code>User</code> class (cannot pass in a mock instance of database)</li>
+<li>tight coupling between between <code>User</code> and <code>MYSQLDatabase</code> objects</li>
+<li>depending on concrete implementation</li>
+</ul>
+<h2 id="inversion-of-control">Inversion of control</h2>
+<p>All we need to do here is to invert the <em>control flow</em>.
+Instead of <code>User</code> class handling the creation and life-cycle of
+this database object, initialize the database instance
+somewhere higher up the <em>dependency graph</em>,
+then pass it down as a parameter (inject).</p>
+<pre><code class="language-php">&lt;?php
+class User {
+    protected MYSQLDatabase $database;
+
+    public function __construct(MYSQLDatabase $database) {
+        $this-&gt;database = $database;
+    }
+
+    public function save() {
+        $this-&gt;database-&gt;sql('UPDATE WHERE etc..');
+    }
+}
+
+$database = new MYSQLDatabase();
+$user = new User($database);
+$user-&gt;save();
+</code></pre>
+<p>Now we can unit test the internals of this class
+by passing in a <em>mock</em> instance of database.</p>
+<p>Still, couple of problems with this:</p>
+<ul>
+<li>hadrcoded assumption about the database used</li>
+<li><code>User</code> is hinged on concrete implementation</li>
+</ul>
+<blockquote>
+<p>IoC principle asks us to <strong>rely on abstractions</strong>
+rather than concrete implementations.</p>
+</blockquote>
+<pre><code class="language-php">&lt;?php
+interface Database {
+    public function sql(string $sql);
+}
+
+class OracleDatabase implements Database {
+    // ..
+}
+
+class MYSQLDatabase implements Database {
+    // ..
+}
+
+class User {
+    protected Database $database;
+
+    public function __construct(Database $database) {
+        $this-&gt;database = $database;
+    }
+
+    public function save() {
+        $this-&gt;database-&gt;sql('UPDATE WHERE etc..');
+    }
+}
+
+$database = new OracleDatabase();
+$user = new User($database);
+$user-&gt;save();
+
+$database = new MYSQLDatabase();
+$user = new User($database);
+$user-&gt;save();
+</code></pre>
+
+
+     	<script src="js/prism.js"></script>
+    </body>
+    </html>
+  
